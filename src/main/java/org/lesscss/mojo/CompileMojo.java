@@ -40,10 +40,10 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 @Mojo( name = "compile", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true )
 public class CompileMojo extends AbstractLessCssMojo {
 
-	@Parameter(name = "${session}", readonly = true)
+	@Parameter(property = "session", readonly = true)
 	private MavenSession mavenSession;
 
-	@Parameter(name = "${mojoExecution}", readonly = true)
+	@Parameter(property = "mojoExecution", readonly = true)
 	private MojoExecution mojoExecution;
 
 	/**

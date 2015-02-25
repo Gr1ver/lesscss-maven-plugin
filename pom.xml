@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.lesscss</groupId>
     <artifactId>lesscss-maven-plugin</artifactId>
-    <version>1.7.0.1.2-SNAPSHOT</version>
+    <version>1.8.0.1.2-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
     <name>Official LESS CSS Maven Plugin</name>
     <description>Official LESS CSS Maven Plugin</description>
@@ -133,8 +133,8 @@
                     <projectsDirectory>src/it</projectsDirectory>
                     <settingsFile>src/it/settings.xml</settingsFile>
                     <!--
-                    For debugging the integration tests:                     
-                    <mavenOpts>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000</mavenOpts> 
+                    For debugging the integration tests:
+                    <mavenOpts>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005</mavenOpts> 
                     -->
                 </configuration>
                 <executions>
