@@ -7,7 +7,7 @@
     <packaging>maven-plugin</packaging>
     <name>Official LESS CSS Maven Plugin</name>
     <description>Official LESS CSS Maven Plugin</description>
-    <url>http://github.com/marceloverdijk/lesscss-maven-plugin</url>
+    <url>http://github.com/Gr1ver/lesscss-maven-plugin</url>
     
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -206,13 +206,13 @@
     
     <issueManagement>
         <system>GitHub</system>
-        <url>http://github.com/marceloverdijk/lesscss-maven-plugin/issues</url>
+        <url>http://github.com/Gr1ver/lesscss-maven-plugin/issues</url>
     </issueManagement>
     
     <scm>
-        <connection>scm:git:git@github.com:marceloverdijk/lesscss-maven-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:marceloverdijk/lesscss-maven-plugin.git</developerConnection>
-        <url>http://github.com/marceloverdijk/lesscss-maven-plugin</url>
+        <connection>scm:git:git@github.com:Gr1ver/lesscss-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:Gr1ver/lesscss-maven-plugin.git</developerConnection>
+        <url>https://github.com/Gr1ver/lesscss-maven-plugin</url>
     </scm>
     
     <!-- This marked as deprecated for Maven 3.X. This is checked by maven-enforcer-plugin -->
