@@ -19,7 +19,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.PluginParameterExpressionEvaluator;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -36,6 +39,12 @@ import org.sonatype.plexus.build.incremental.BuildContext;
  */
 @Mojo( name = "compile", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true )
 public class CompileMojo extends AbstractLessCssMojo {
+
+	@Parameter(name = "${session}", readonly = true)
+	private MavenSession mavenSession;
+
+	@Parameter(name = "${mojoExecution}", readonly = true)
+	private MojoExecution mojoExecution;
 
 	/**
 	 * The directory for compiled CSS stylesheets.
@@ -73,7 +82,8 @@ public class CompileMojo extends AbstractLessCssMojo {
 	private String encoding;
 
 	/**
-	 * When <code>true</code> forces the LESS compiler to always compile the LESS sources. By default LESS sources are only compiled when modified (including imports) or the CSS stylesheet does not exists.
+	 * When <code>true</code> forces the LESS compiler to always compile the LESS sources.
+	 * By default LESS sources are only compiled when modified (including imports) or the CSS stylesheet does not exists.
 	 * 
 	 */
 	@Parameter( defaultValue = "false", property = "lesscss.force" )
@@ -164,6 +174,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 
 	private void compileIfChanged(String[] files, Object lessCompiler) throws MojoExecutionException {
 		try {
+			MavenExpressionEvaluator evaluator = getEvaluator();
 			for (String file : files) {
 				File input = new File(sourceDirectory, file);
 
@@ -180,7 +191,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 				}
 
 				try {
-					LessSource lessSource = new LessSource(input);
+					LessSource lessSource = new LessSource(input, evaluator);
 					if (force || !output.exists() || (output.lastModified() < lessSource.getLastModifiedIncludingImports())) {
 						long compilationStarted = System.currentTimeMillis();
 						getLog().info("Compiling LESS source: " + file + "...");
@@ -244,5 +255,13 @@ public class CompileMojo extends AbstractLessCssMojo {
 			}
 			return lessCompiler;
 		}
+	}
+
+	private MavenExpressionEvaluator getEvaluator() {
+		if((mavenSession != null) && (mojoExecution != null)) {
+			return new MavenExpressionEvaluator(
+					new PluginParameterExpressionEvaluator(mavenSession, mojoExecution, null, null, null, null), getLog()) ;
+		}
+		return null;
 	}
 }

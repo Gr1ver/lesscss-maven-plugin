@@ -31,7 +31,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.PluginParameterExpressionEvaluator;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.codehaus.plexus.util.Scanner;
@@ -70,6 +73,12 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 	private BuildContext buildContext;
 
 	@Mock
+	private MavenSession mavenSession;
+
+	@Mock
+	private MojoExecution mojoExecution;
+
+	@Mock
 	private Scanner scanner;
 
 	@Mock
@@ -96,6 +105,12 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 	@Mock
 	private LessSource lessSource;
 
+	@Mock
+	private MavenExpressionEvaluator mavenExpressionEvaluator;
+
+	@Mock
+	private PluginParameterExpressionEvaluator evaluator;
+
 	@Override
 	@Before
 	public void setUp() throws URISyntaxException, IllegalAccessException, IOException {
@@ -103,6 +118,8 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		mojo.setLog(log);
 
 		setVariableValueToObject(mojo, "buildContext", buildContext);
+		setVariableValueToObject(mojo, "mavenSession", mavenSession);
+		setVariableValueToObject(mojo, "mojoExecution", mojoExecution);
 		setVariableValueToObject(mojo, "sourceDirectory", sourceDirectory);
 		setVariableValueToObject(mojo, "outputDirectory", outputDirectory);
 		setVariableValueToObject(mojo, "includes", includes);
@@ -125,7 +142,10 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
-		whenNew(LessSource.class).withArguments(input).thenReturn(lessSource);
+		whenNew(PluginParameterExpressionEvaluator.class).withArguments(
+				mavenSession, mojoExecution, null, null, null, null).thenReturn(evaluator);
+		whenNew(MavenExpressionEvaluator.class).withArguments(evaluator, log).thenReturn(mavenExpressionEvaluator);
+		whenNew(LessSource.class).withArguments(input, mavenExpressionEvaluator).thenReturn(lessSource);
 
 		when(output.lastModified()).thenReturn(1l);
 		when(lessSource.getLastModifiedIncludingImports()).thenReturn(2l);
@@ -147,7 +167,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(output).getParentFile();
 		verify(parent).exists();
 
-		verifyNew(LessSource.class).withArguments(input);
+		verifyNew(LessSource.class).withArguments(input, mavenExpressionEvaluator);
 
 		verify(output).lastModified();
 		verify(lessSource).getLastModifiedIncludingImports();
@@ -172,7 +192,10 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
-		whenNew(LessSource.class).withArguments(input).thenReturn(lessSource);
+		whenNew(PluginParameterExpressionEvaluator.class).withArguments(
+				mavenSession, mojoExecution, null, null, null, null).thenReturn(evaluator);
+		whenNew(MavenExpressionEvaluator.class).withArguments(evaluator, log).thenReturn(mavenExpressionEvaluator);
+		whenNew(LessSource.class).withArguments(input, mavenExpressionEvaluator).thenReturn(lessSource);
 
 		when(output.lastModified()).thenReturn(2l);
 		when(lessSource.getLastModifiedIncludingImports()).thenReturn(1l);
@@ -194,7 +217,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(output).getParentFile();
 		verify(parent).exists();
 
-		verifyNew(LessSource.class).withArguments(input);
+		verifyNew(LessSource.class).withArguments(input, mavenExpressionEvaluator);
 		verify(lessCompiler).setCompress(false);
 		verify(lessCompiler).setEncoding(null);
 
@@ -244,7 +267,10 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
-		whenNew(LessSource.class).withArguments(input).thenThrow(new IOException());
+		whenNew(PluginParameterExpressionEvaluator.class).withArguments(
+				mavenSession, mojoExecution, null, null, null, null).thenReturn(evaluator);
+		whenNew(MavenExpressionEvaluator.class).withArguments(evaluator, log).thenReturn(mavenExpressionEvaluator);
+		whenNew(LessSource.class).withArguments(input, mavenExpressionEvaluator).thenThrow(new IOException());
 
 		mojo.execute();
 
@@ -263,7 +289,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(output).getParentFile();
 		verify(parent).exists();
 
-		verifyNew(LessSource.class).withArguments(input);
+		verifyNew(LessSource.class).withArguments(input, mavenExpressionEvaluator);
 	}
 
 	@Test(expected = MojoExecutionException.class)
@@ -281,7 +307,10 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
-		whenNew(LessSource.class).withArguments(input).thenReturn(lessSource);
+		whenNew(PluginParameterExpressionEvaluator.class).withArguments(
+				mavenSession, mojoExecution, null, null, null, null).thenReturn(evaluator);
+		whenNew(MavenExpressionEvaluator.class).withArguments(evaluator, log).thenReturn(mavenExpressionEvaluator);
+		whenNew(LessSource.class).withArguments(input, mavenExpressionEvaluator).thenReturn(lessSource);
 
 		when(output.lastModified()).thenReturn(1l);
 		when(lessSource.getLastModifiedIncludingImports()).thenReturn(2l);
@@ -305,7 +334,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(output).getParentFile();
 		verify(parent).exists();
 
-		verifyNew(LessSource.class).withArguments(input);
+		verifyNew(LessSource.class).withArguments(input, mavenExpressionEvaluator);
 
 		verify(output).lastModified();
 		verify(lessSource).getLastModifiedIncludingImports();
@@ -335,7 +364,10 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
-		whenNew(LessSource.class).withArguments(input).thenReturn(lessSource);
+		whenNew(PluginParameterExpressionEvaluator.class).withArguments(
+				mavenSession, mojoExecution, null, null, null, null).thenReturn(evaluator);
+		whenNew(MavenExpressionEvaluator.class).withArguments(evaluator, log).thenReturn(mavenExpressionEvaluator);
+		whenNew(LessSource.class).withArguments(input, mavenExpressionEvaluator).thenReturn(lessSource);
 
 		when(output.lastModified()).thenReturn(1l);
 		when(lessSource.getLastModifiedIncludingImports()).thenReturn(2l);
@@ -358,7 +390,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(output).getParentFile();
 		verify(parent).exists();
 
-		verifyNew(LessSource.class).withArguments(input);
+		verifyNew(LessSource.class).withArguments(input, mavenExpressionEvaluator);
 
 		verify(output).lastModified();
 		verify(lessSource).getLastModifiedIncludingImports();
@@ -410,7 +442,10 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(parent.exists()).thenReturn(false);
 		when(parent.mkdirs()).thenReturn(true);
 
-		whenNew(LessSource.class).withArguments(input).thenReturn(lessSource);
+		whenNew(PluginParameterExpressionEvaluator.class).withArguments(
+				mavenSession, mojoExecution, null, null, null, null).thenReturn(evaluator);
+		whenNew(MavenExpressionEvaluator.class).withArguments(evaluator, log).thenReturn(mavenExpressionEvaluator);
+		whenNew(LessSource.class).withArguments(input, mavenExpressionEvaluator).thenReturn(lessSource);
 
 		when(output.lastModified()).thenReturn(1l);
 		when(lessSource.getLastModifiedIncludingImports()).thenReturn(2l);
@@ -433,7 +468,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(parent).exists();
 		verify(parent).mkdirs();
 
-		verifyNew(LessSource.class).withArguments(input);
+		verifyNew(LessSource.class).withArguments(input, mavenExpressionEvaluator);
 
 		verify(output).lastModified();
 		verify(lessSource).getLastModifiedIncludingImports();
@@ -495,7 +530,10 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(parent.exists()).thenReturn(true);
 		when(parent.mkdirs()).thenReturn(true);
 
-		whenNew(LessSource.class).withArguments(input).thenReturn(lessSource);
+		whenNew(PluginParameterExpressionEvaluator.class).withArguments(
+				mavenSession, mojoExecution, null, null, null, null).thenReturn(evaluator);
+		whenNew(MavenExpressionEvaluator.class).withArguments(evaluator, log).thenReturn(mavenExpressionEvaluator);
+		whenNew(LessSource.class).withArguments(input, mavenExpressionEvaluator).thenReturn(lessSource);
 
 
 		mojo.execute();

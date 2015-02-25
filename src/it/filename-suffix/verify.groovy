@@ -1,11 +1,4 @@
-expected = """#header {
-  color: #4d926f;
-}
-h2 {
-  color: #4d926f;
-}
-
-"""
+expected = '#header {\n  color: #4d926f;\n}\nh2 {\n  color: #4d926f;\n}\n\r\n'
 
 css = new File(basedir, "target/min-test-1.33.7.css")
 assert css.exists()

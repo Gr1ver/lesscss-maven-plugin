@@ -11,6 +11,9 @@
                 <groupId>org.lesscss</groupId>
                 <artifactId>lesscss-maven-plugin</artifactId>
                 <version>@project.version@</version>
+                <configuration>
+                    <compress>true</compress>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
