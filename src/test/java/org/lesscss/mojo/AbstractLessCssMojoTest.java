@@ -28,7 +28,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.lesscss.mojo.AbstractLessCssMojo;
 import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -54,6 +53,7 @@ public class AbstractLessCssMojoTest extends AbstractMojoTestCase {
 	@Mock
 	private Scanner scanner;
 
+	@Override
 	@Before
 	public void setUp() throws Exception {
 		mojo = new AbstractLessCssMojo() {
@@ -80,6 +80,7 @@ public class AbstractLessCssMojoTest extends AbstractMojoTestCase {
 		verify(scanner).scan();
 	}
 
+	@Override
 	@After
 	public void tearDown() {
 	}

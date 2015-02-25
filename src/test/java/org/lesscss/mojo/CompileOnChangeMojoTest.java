@@ -16,12 +16,14 @@ public class CompileOnChangeMojoTest extends AbstractMojoTestCase {
 	public TemporaryFolder tempFolder = new TemporaryFolder();
 
 	/** {@inheritDoc} */
+	@Override
 	protected void setUp() throws Exception {
 		// required
 		super.setUp();
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected void tearDown() throws Exception {
 		// required
 		super.tearDown();
@@ -50,6 +52,7 @@ public class CompileOnChangeMojoTest extends AbstractMojoTestCase {
 		 * recompilation and stop the watching mode asynchronous in this thread.
 		 */
 		Thread watchThread = new Thread() {
+			@Override
 			public void run() {
 				try {
 					compileMojo.execute();
@@ -78,7 +81,7 @@ public class CompileOnChangeMojoTest extends AbstractMojoTestCase {
 		long startMillies = System.currentTimeMillis();
 		long currentMillies = startMillies;
 		// check for a maximum of ten seconds if the file has been changed
-		while (oldLastModified >= newLastModified && ((currentMillies - startMillies) < 10000)) {
+		while ((oldLastModified >= newLastModified) && ((currentMillies - startMillies) < 10000)) {
 			Thread.sleep(200); // wait for 0.2 seconds
 			generatedFile = new File(compileMojo.outputDirectory, "bootstrap.css");
 			newLastModified = generatedFile.lastModified();

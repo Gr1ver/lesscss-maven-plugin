@@ -41,66 +41,66 @@ public class CompileMojo extends AbstractLessCssMojo {
 	 * The directory for compiled CSS stylesheets.
 	 * 
 	 */
-    @Parameter( defaultValue = "${project.build.directory}", property = "lesscss.outputDirectory", required = true )
+	@Parameter( defaultValue = "${project.build.directory}", property = "lesscss.outputDirectory", required = true )
 	protected File outputDirectory;
 
 	/**
 	 * When <code>true</code> the LESS compiler will compress the CSS stylesheets.
 	 * 
 	 */
-    @Parameter( defaultValue = "false", property = "lesscss.compress" )
+	@Parameter( defaultValue = "false", property = "lesscss.compress" )
 	private boolean compress;
 
 	/**
 	 * When <code>true</code> the plugin will watch for changes in LESS files and compile if it detects one.
 	 * 
 	 */
-    @Parameter( defaultValue = "false", property = "lesscss.watch" )
+	@Parameter( defaultValue = "false", property = "lesscss.watch" )
 	protected boolean watch=false;
 
 	/**
 	 * When <code>true</code> the plugin will watch for changes in LESS files and compile if it detects one.
 	 * 
 	 */
-    @Parameter( defaultValue = "1000", property = "lesscss.watchInterval" )
+	@Parameter( defaultValue = "1000", property = "lesscss.watchInterval" )
 	private int watchInterval=1000;
 
 	/**
 	 * The character encoding the LESS compiler will use for writing the CSS stylesheets.
 	 * 
 	 */
-    @Parameter( defaultValue = "${project.build.sourceEncoding}", property = "lesscss.encoding" )
+	@Parameter( defaultValue = "${project.build.sourceEncoding}", property = "lesscss.encoding" )
 	private String encoding;
 
 	/**
 	 * When <code>true</code> forces the LESS compiler to always compile the LESS sources. By default LESS sources are only compiled when modified (including imports) or the CSS stylesheet does not exists.
 	 * 
 	 */
-    @Parameter( defaultValue = "false", property = "lesscss.force" )
+	@Parameter( defaultValue = "false", property = "lesscss.force" )
 	private boolean force;
 
 	/**
 	 * The location of the LESS JavasSript file.
 	 * 
 	 */
-    @Parameter
+	@Parameter
 	private File lessJs;
 
 	/**
 	 * The location of the NodeJS executable.
 	 *
 	 */
-    @Parameter
+	@Parameter
 	private String nodeExecutable;
-        
+
 	/**
 	 * The format of the output file names.
 	 *
 	 */
-    @Parameter
+	@Parameter
 	private String outputFileFormat;
-        
-    private static final String FILE_NAME_FORMAT_PARAMETER_REGEX = "\\{fileName\\}";
+
+	private static final String FILE_NAME_FORMAT_PARAMETER_REGEX = "\\{fileName\\}";
 
 	/**
 	 * Execute the MOJO.
@@ -128,10 +128,10 @@ public class CompileMojo extends AbstractLessCssMojo {
 
 	private void executeInternal() throws MojoExecutionException {
 		long start = System.currentTimeMillis();
-		
+
 		String[] files = getIncludedFiles();
 
-		if (files == null || files.length < 1) {
+		if ((files == null) || (files.length < 1)) {
 			getLog().info("Nothing to compile - no LESS sources found");
 		} else {
 			if (getLog().isDebugEnabled()) {
@@ -169,9 +169,9 @@ public class CompileMojo extends AbstractLessCssMojo {
 
 				buildContext.removeMessages(input);
 
-                if(outputFileFormat != null){
-                    file = outputFileFormat.replaceAll(FILE_NAME_FORMAT_PARAMETER_REGEX, file.replace(".less", ""));
-                }
+				if(outputFileFormat != null){
+					file = outputFileFormat.replaceAll(FILE_NAME_FORMAT_PARAMETER_REGEX, file.replace(".less", ""));
+				}
 
 				File output = new File(outputDirectory, file.replace(".less", ".css"));
 
@@ -181,7 +181,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 
 				try {
 					LessSource lessSource = new LessSource(input);
-					if (force || !output.exists() || output.lastModified() < lessSource.getLastModifiedIncludingImports()) {
+					if (force || !output.exists() || (output.lastModified() < lessSource.getLastModifiedIncludingImports())) {
 						long compilationStarted = System.currentTimeMillis();
 						getLog().info("Compiling LESS source: " + file + "...");
 						if (lessCompiler instanceof LessCompiler) {

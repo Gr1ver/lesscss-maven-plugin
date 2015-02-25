@@ -33,7 +33,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lesscss.LessSource;
-import org.lesscss.mojo.ListMojo;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -87,6 +86,7 @@ public class ListMojoTest extends AbstractMojoTestCase {
 	@Mock
 	private Scanner scanner;
 
+	@Override
 	@Before
 	public void setUp() throws Exception {
 		mojo = new ListMojo();
@@ -191,6 +191,7 @@ public class ListMojoTest extends AbstractMojoTestCase {
 		mojo.execute();
 	}
 
+	@Override
 	@After
 	public void tearDown() {
 	}

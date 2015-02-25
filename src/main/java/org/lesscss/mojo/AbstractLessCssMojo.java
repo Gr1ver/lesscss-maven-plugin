@@ -29,28 +29,28 @@ import org.sonatype.plexus.build.incremental.BuildContext;
  */
 public abstract class AbstractLessCssMojo extends AbstractMojo {
 
-    @Component
+	@Component
 	protected BuildContext buildContext;
 
 	/**
 	 * The source directory containing the LESS sources.
 	 * 
 	 */
-    @Parameter( defaultValue = "${project.basedir}/src/main/less", property = "lesscss.sourceDirectory", required = true)
+	@Parameter( defaultValue = "${project.basedir}/src/main/less", property = "lesscss.sourceDirectory", required = true)
 	protected File sourceDirectory;
 
 	/**
 	 * List of files to include. Specified as fileset patterns which are relative to the source directory. Default value is: { "**\/*.less" }
 	 * 
 	 */
-    @Parameter
+	@Parameter
 	protected String[] includes = new String[] { "**/*.less" };
 
 	/**
 	 * List of files to exclude. Specified as fileset patterns which are relative to the source directory.
 	 * 
 	 */
-    @Parameter
+	@Parameter
 	protected String[] excludes = new String[] {};
 
 	/**
@@ -65,12 +65,12 @@ public abstract class AbstractLessCssMojo extends AbstractMojo {
 		scanner.scan();
 		return scanner.getIncludedFiles();
 	}
-	
+
 	/**
-	 * Whether to skip plugin execution. 
+	 * Whether to skip plugin execution.
 	 * This makes the build more controllable from profiles.
 	 * 
 	 */
-    @Parameter( defaultValue = "false", property = "lesscss.skip")
+	@Parameter( defaultValue = "false", property = "lesscss.skip")
 	protected boolean skip;
 }

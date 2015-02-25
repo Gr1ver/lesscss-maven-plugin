@@ -48,7 +48,7 @@ public class ListMojo extends AbstractLessCssMojo {
 
 		String[] files = getIncludedFiles();
 
-		if (files == null || files.length < 1) {
+		if ((files == null) || (files.length < 1)) {
 			getLog().info("No LESS sources found");
 		} else {
 			getLog().info("The following LESS sources have been resolved:");
@@ -71,7 +71,7 @@ public class ListMojo extends AbstractLessCssMojo {
 		String prefix = "";
 		if (level > 0) {
 			for (int i = 1; i <= level; i++) {
-				if (i == level && last) {
+				if ((i == level) && last) {
 					prefix = prefix + "`-- ";
 				} else if (i == level) {
 					prefix = prefix + "|-- ";

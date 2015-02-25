@@ -42,7 +42,6 @@ import org.junit.runner.RunWith;
 import org.lesscss.LessCompiler;
 import org.lesscss.LessException;
 import org.lesscss.LessSource;
-import org.lesscss.mojo.CompileMojo;
 import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -97,6 +96,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 	@Mock
 	private LessSource lessSource;
 
+	@Override
 	@Before
 	public void setUp() throws URISyntaxException, IllegalAccessException, IOException {
 		mojo = new CompileMojo();
@@ -121,7 +121,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		whenNew(File.class).withArguments(sourceDirectory, "less.less").thenReturn(input);
 		whenNew(File.class).withArguments(outputDirectory, "less.css").thenReturn(output);
 
-        when(output.exists()).thenReturn(true);
+		when(output.exists()).thenReturn(true);
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
@@ -168,7 +168,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		whenNew(File.class).withArguments(sourceDirectory, "less.less").thenReturn(input);
 		whenNew(File.class).withArguments(outputDirectory, "less.css").thenReturn(output);
 
-        when(output.exists()).thenReturn(true);
+		when(output.exists()).thenReturn(true);
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
@@ -331,7 +331,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		whenNew(File.class).withArguments(sourceDirectory, "less.less").thenReturn(input);
 		whenNew(File.class).withArguments(outputDirectory, "less.css").thenReturn(output);
 
-        when(output.exists()).thenReturn(true);
+		when(output.exists()).thenReturn(true);
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 
@@ -405,7 +405,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		whenNew(File.class).withArguments(sourceDirectory, "less.less").thenReturn(input);
 		whenNew(File.class).withArguments(outputDirectory, "less.css").thenReturn(output);
 
-        when(output.exists()).thenReturn(true);
+		when(output.exists()).thenReturn(true);
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(false);
 		when(parent.mkdirs()).thenReturn(true);
@@ -476,10 +476,10 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(parent).exists();
 		verify(parent).mkdirs();
 	}
-        
+
 	@Test
 	public void testExecutionOutputFilesNamedFromOutputFileFormat() throws Exception {
-            
+
 		setVariableValueToObject(mojo, "outputFileFormat", "{fileName}-min.css");
 		files = new String[] { "less.less" };
 
@@ -494,9 +494,9 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		when(output.getParentFile()).thenReturn(parent);
 		when(parent.exists()).thenReturn(true);
 		when(parent.mkdirs()).thenReturn(true);
-                
+
 		whenNew(LessSource.class).withArguments(input).thenReturn(lessSource);
-                
+
 
 		mojo.execute();
 
@@ -516,6 +516,7 @@ public class CompileMojoTest extends AbstractMojoTestCase {
 		verify(parent).exists();
 	}
 
+	@Override
 	@After
 	public void tearDown() {
 	}
