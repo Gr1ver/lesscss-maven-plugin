@@ -46,22 +46,26 @@ public class ListMojo extends AbstractLessCssMojo {
 			getLog().debug("excludes = " + Arrays.toString(excludes));
 		}
 
-		String[] files = getIncludedFiles();
-
-		if ((files == null) || (files.length < 1)) {
-			getLog().info("No LESS sources found");
+		if(isSourceMissingAndSkip()) {
+			getLog().info("Skipping plugin execution per incorrect source dir");
 		} else {
-			getLog().info("The following LESS sources have been resolved:");
+			String[] files = getIncludedFiles();
 
-			for (String file : files) {
-				File lessFile = new File(sourceDirectory, file);
-				try {
-					LessSource lessSource = new LessSource(lessFile);
-					listLessSource(lessSource, file, 0, false);
-				} catch (FileNotFoundException e) {
-					throw new MojoExecutionException("Error while loading LESS source: " + lessFile.getAbsolutePath(), e);
-				} catch (IOException e) {
-					throw new MojoExecutionException("Error while loading LESS source: " + lessFile.getAbsolutePath(), e);
+			if ((files == null) || (files.length < 1)) {
+				getLog().info("No LESS sources found");
+			} else {
+				getLog().info("The following LESS sources have been resolved:");
+
+				for (String file : files) {
+					File lessFile = new File(sourceDirectory, file);
+					try {
+						LessSource lessSource = new LessSource(lessFile);
+						listLessSource(lessSource, file, 0, false);
+					} catch (FileNotFoundException e) {
+						throw new MojoExecutionException("Error while loading LESS source: " + lessFile.getAbsolutePath(), e);
+					} catch (IOException e) {
+						throw new MojoExecutionException("Error while loading LESS source: " + lessFile.getAbsolutePath(), e);
+					}
 				}
 			}
 		}

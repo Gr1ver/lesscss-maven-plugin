@@ -129,10 +129,12 @@ public class CompileMojo extends AbstractLessCssMojo {
 			getLog().debug("skip = " + skip);
 		}
 
-		if(!skip){
-			executeInternal();
-		} else {
+		if(skip){
 			getLog().info("Skipping plugin execution per configuration");
+		} else if(isSourceMissingAndSkip()) {
+			getLog().info("Skipping plugin execution per incorrect source dir");
+		} else {
+			executeInternal();
 		}
 	}
 

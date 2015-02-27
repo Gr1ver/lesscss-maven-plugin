@@ -54,6 +54,20 @@ public abstract class AbstractLessCssMojo extends AbstractMojo {
 	protected String[] excludes = new String[] {};
 
 	/**
+	 * Whether to skip plugin execution.
+	 * This makes the build more controllable from profiles.
+	 * 
+	 */
+	@Parameter( defaultValue = "false", property = "lesscss.skip")
+	protected boolean skip;
+
+	/**
+	 * Whether to not throwing exceptions on missing sourcedir
+	 */
+	@Parameter( defaultValue = "false", property = "lesscss.silentMissingSourceDir")
+	private boolean silentMissingSourceDir;
+
+	/**
 	 * Scans for the LESS sources that should be compiled.
 	 * 
 	 * @return The list of LESS sources.
@@ -66,11 +80,21 @@ public abstract class AbstractLessCssMojo extends AbstractMojo {
 		return scanner.getIncludedFiles();
 	}
 
-	/**
-	 * Whether to skip plugin execution.
-	 * This makes the build more controllable from profiles.
-	 * 
-	 */
-	@Parameter( defaultValue = "false", property = "lesscss.skip")
-	protected boolean skip;
+	protected boolean isSourceMissingAndSkip() {
+		if(silentMissingSourceDir) {
+			if (sourceDirectory == null) {
+				getLog().info( "No sourcedir set" );
+				return true;
+			}
+			if (!sourceDirectory.exists()) {
+				getLog().info( "sourcedir " + sourceDirectory + " does not exist" );
+				return true;
+			}
+			if (!sourceDirectory.isDirectory()) {
+				getLog().info( "sourcedir " + sourceDirectory + " is not a directory" );
+				return true;
+			}
+		}
+		return false;
+	}
 }
