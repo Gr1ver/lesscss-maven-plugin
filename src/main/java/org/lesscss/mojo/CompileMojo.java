@@ -216,6 +216,7 @@ public class CompileMojo extends AbstractLessCssMojo {
 					if (StringUtils.isEmpty(message)) {
 						message = "Error compiling LESS source";
 					}
+					getLog().error(message, e);
 					buildContext.addMessage(input, 0, 0, "Error compiling LESS source", BuildContext.SEVERITY_ERROR, e);
 					throw new MojoExecutionException("Error while compiling LESS source: " + file, e);
 				} catch (InterruptedException e) {
